@@ -1,13 +1,20 @@
 package main
 
 import (
+	e "Iber-Chambi/fiber/env"
 	"fmt"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/google/uuid"
 )
+
+func init() {
+	fmt.Println("Init")
+	e.Init()
+}
 
 type User struct {
 	Id        string
@@ -29,6 +36,8 @@ func handlerPostUser(c *fiber.Ctx) error {
 
 }
 
+var en = e.Env()
+
 func main() {
 	fmt.Println("Iniciado")
 	app := fiber.New()
@@ -47,6 +56,11 @@ func main() {
 	userGroup := app.Group("/user")
 	userGroup.Get("", handlerUser)
 	userGroup.Post("", handlerPostUser)
+	port := ":" + en.GetPort()
 
-	app.Listen(":3001")
+	log.Printf(`Running in http://localhost%v`, port)
+	if err := app.Listen(port); err != nil {
+		log.Panic(err)
+	}
+
 }

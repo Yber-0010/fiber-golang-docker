@@ -16,5 +16,5 @@ go install github.com/cosmtrek/air@latest && air init
 - ya estaria funcionando el proyecto.
 
 - docker run
-
-```docker build -t fiber . && docker run -dp 3001:3001 --name=fiber fiber```
+- evironment PORT dinamico
+```docker build -t fiber . && docker run -dp 3001:3002 --name=fiber -e PORT=3002 fiber```
