@@ -17,8 +17,8 @@ type environmentApp struct {
 	// urlOK    bool
 	// svcurl   string
 	// svcurlOK bool
-	// secrue   string
-	// secureOK bool
+	secrue   string
+	secureOK bool
 }
 
 // InitApp initializes the environment variables for the application
@@ -29,7 +29,7 @@ func (e *environment) initApp(wg *sync.WaitGroup) {
 	e.port, e.portOK = os.LookupEnv("PORT")
 	// e.url, e.urlOK = os.LookupEnv("URL")
 	// e.svcurl, e.svcurlOK = os.LookupEnv("SVC_URL")
-	// e.secrue, e.secureOK = os.LookupEnv("SECURE")
+	e.secrue, e.secureOK = os.LookupEnv("SECURE")
 	MuApp.Unlock()
 	wg.Done()
 }
@@ -39,9 +39,21 @@ func (e *environment) initApp(wg *sync.WaitGroup) {
 // Por defecto es `3001`.
 func (e *environment) GetPort() (val string) {
 	if !e.portOK {
-		val = "3001"
+		val = "3002"
 	} else {
 		val = e.port
+	}
+	return
+}
+
+// `SECURE`: habilita la encriptación de los datos mediante TLS.
+//
+// Por defecto es `false`.
+func (e *environment) GetSecure() (val bool) {
+	if e.secureOK {
+		val = e.secrue == "true"
+	} else { // default https change here next remove else
+		val = true
 	}
 	return
 }

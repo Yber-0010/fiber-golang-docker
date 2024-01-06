@@ -1,66 +1,72 @@
 package main
 
 import (
-	e "Iber-Chambi/fiber/env"
 	"fmt"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
+
+	e "github.com/Yber-0010/fiber-golang-docker/env"
+	sr "github.com/Yber-0010/fiber-golang-docker/router"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
-	"github.com/google/uuid"
 )
-
-func init() {
-	fmt.Println("Init")
-	e.Init()
-}
-
-type User struct {
-	Id        string
-	FirstName string
-	LastName  string
-}
-
-func handlerUser(c *fiber.Ctx) error {
-	user := User{FirstName: "Iber", LastName: "Chambi"}
-	return c.Status(fiber.StatusOK).JSON(user)
-}
-func handlerPostUser(c *fiber.Ctx) error {
-	user := User{}
-	if err := c.BodyParser(&user); err != nil {
-		return err
-	}
-	user.Id = uuid.NewString()
-	return c.Status(fiber.StatusOK).JSON(user)
-
-}
 
 var en = e.Env()
 
+func init() {
+
+	fmt.Println("Proyecto test con fiber")
+	e.Init()
+
+}
+
 func main() {
-	fmt.Println("Iniciado")
+
 	app := fiber.New()
-
-	// midelwares
-	app.Use(logger.New()) // fiber gemerea un log de peticiones a las rutas
-
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, world")
 	})
-	app.Get("/about", func(c *fiber.Ctx) error {
-		return c.SendString("about")
+
+	app.Use(logger.New())    // fiber gemerea un log de peticiones a las rutas
+	app.Use(requestid.New()) // generea un uuid en las cabeceras de las rutas
+
+	sr.ServiceRouter(app)
+
+	app.Get("/*", func(c *fiber.Ctx) error {
+		return c.Status(fiber.StatusNotFound).SendString(`<h1>404 No Encontrado</h1>`)
 	})
 
-	app.Use(requestid.New()) // generea un uuid en las cabeceras de las rutas
-	userGroup := app.Group("/user")
-	userGroup.Get("", handlerUser)
-	userGroup.Post("", handlerPostUser)
+	secure := en.GetSecure()
 	port := ":" + en.GetPort()
 
-	log.Printf(`Running in http://localhost%v`, port)
-	if err := app.Listen(port); err != nil {
-		log.Panic(err)
+	if secure {
+		go func() {
+			log.Printf(`Running with TLS in https://localhost%v`, port)
+			if err := app.ListenTLS(
+				port,
+				"./certs/127.0.0.1.pem",
+				"./certs/127.0.0.1-key.pem",
+			); err != nil {
+				log.Panic(err)
+			}
+		}()
+	} else {
+		go func() {
+			log.Printf(`Running in http://localhost%v`, port)
+			if err := app.Listen(port); err != nil {
+				log.Panic(err)
+			}
+		}()
 	}
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+
+	<-c
+	_ = app.Shutdown()
 
 }

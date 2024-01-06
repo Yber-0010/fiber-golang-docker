@@ -1,4 +1,4 @@
-module Iber-Chambi/fiber
+module github.com/Yber-0010/fiber-golang-docker
 
 go 1.21.4
 
