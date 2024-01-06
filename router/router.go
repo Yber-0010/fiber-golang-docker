@@ -6,6 +6,11 @@ import (
 )
 
 func ServiceRouter(app fiber.Router) {
+
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("Hello, world")
+	})
+
 	egx := app.Group("api/v1/")
 	egx.Get("user", h.User)
 	egx.Post("user", h.SendUser)

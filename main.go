@@ -11,8 +11,6 @@ import (
 	sr "github.com/Yber-0010/fiber-golang-docker/router"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/gofiber/fiber/v2/middleware/requestid"
 )
 
 var en = e.Env()
@@ -27,18 +25,8 @@ func init() {
 func main() {
 
 	app := fiber.New()
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, world")
-	})
-
-	app.Use(logger.New())    // fiber gemerea un log de peticiones a las rutas
-	app.Use(requestid.New()) // generea un uuid en las cabeceras de las rutas
-
 	sr.ServiceRouter(app)
-
-	app.Get("/*", func(c *fiber.Ctx) error {
-		return c.Status(fiber.StatusNotFound).SendString(`<h1>404 No Encontrado</h1>`)
-	})
+	sr.ComplementRouter(app)
 
 	secure := en.GetSecure()
 	port := ":" + en.GetPort()
