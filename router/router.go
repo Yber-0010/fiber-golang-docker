@@ -1,17 +1,16 @@
 package router
 
 import (
-	h "github.com/Yber-0010/fiber-golang-docker/infrastructure/handler"
 	"github.com/gofiber/fiber/v2"
 )
 
-func ServiceRouter(app fiber.Router) {
+func Router(app fiber.Router) {
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, world")
 	})
+	app.Get("/*", func(c *fiber.Ctx) error {
+		return c.Status(fiber.StatusNotFound).SendString(`<h1>404 No Encontrado</h1>`)
+	})
 
-	egx := app.Group("api/v1/")
-	egx.Get("user", h.User)
-	egx.Post("user", h.SendUser)
 }

@@ -26,7 +26,4 @@ func ComplementRouter(app fiber.Router) {
 		Title:   "SVC API Metrics",
 		Refresh: 2 * time.Second,
 	}))
-	app.Get("/*", func(c *fiber.Ctx) error {
-		return c.Status(fiber.StatusNotFound).SendString(`<h1>404 No Encontrado</h1>`)
-	})
 }

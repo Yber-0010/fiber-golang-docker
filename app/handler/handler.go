@@ -1,19 +1,19 @@
 package handler
 
 import (
-	dm "github.com/Yber-0010/fiber-golang-docker/domain"
+	m "github.com/Yber-0010/fiber-golang-docker/app/models"
 	"github.com/google/uuid"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func User(c *fiber.Ctx) error {
-	user := dm.User{FirstName: "Iber", LastName: "Chambi"}
+	user := m.User{FirstName: "Iber", LastName: "Chambi"}
 	return c.Status(fiber.StatusOK).JSON(user)
 }
 
 func SendUser(c *fiber.Ctx) error {
-	user := dm.User{}
+	user := m.User{}
 	if err := c.BodyParser(&user); err != nil {
 		return err
 	}

@@ -25,8 +25,9 @@ func init() {
 func main() {
 
 	app := fiber.New()
-	sr.ServiceRouter(app)
 	sr.ComplementRouter(app)
+	sr.ApiRouter(app)
+	sr.Router(app)
 
 	secure := en.GetSecure()
 	port := ":" + en.GetPort()
