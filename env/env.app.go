@@ -53,7 +53,7 @@ func (e *environment) GetSecure() (val bool) {
 	if e.secureOK {
 		val = e.secrue == "true"
 	} else { // default https change here next remove else
-		val = true
+		val = false
 	}
 	return
 }
