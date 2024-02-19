@@ -6,11 +6,12 @@ import (
 
 func Router(app fiber.Router) {
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, world")
+	app.Get("/*", func(ctx *fiber.Ctx) error {
+		return ctx.SendFile("./public/index.html")
 	})
-	app.Get("/*", func(c *fiber.Ctx) error {
-		return c.Status(fiber.StatusNotFound).SendString(`<h1>404 No Encontrado</h1>`)
+
+	app.Use(func(c *fiber.Ctx) error {
+		return c.SendStatus(404)
 	})
 
 }

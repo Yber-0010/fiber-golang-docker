@@ -17,14 +17,17 @@ var en = e.Env()
 
 func init() {
 
-	fmt.Println("Proyecto test con fiber")
+	fmt.Println("Proyecto init con fiber")
 	e.Init()
 
 }
 
 func main() {
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		DisableStartupMessage: false,
+	})
+
 	sr.ComplementRouter(app)
 	sr.ApiRouter(app)
 	sr.Router(app)

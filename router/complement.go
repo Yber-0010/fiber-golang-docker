@@ -13,15 +13,21 @@ import (
 )
 
 func ComplementRouter(app fiber.Router) {
-	app.Use(recover.New())   // recupera la app de un panic
-	app.Use(favicon.New())   // favicon de la app
-	app.Use(logger.New())    // fiber gemerea un log de peticiones a las rutas
-	app.Use(requestid.New()) // generea un uuid en las cabeceras de las rutas
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
 		AllowMethods: "GET, POST, PUT, DELETE, PATCH",
 		AllowHeaders: "Cache-Control, Accept, Content-Type, Content-Length, Accept-Encoding, Authorization",
 	}))
+	app.Use(recover.New())   // recupera la app de un panic
+	app.Use(favicon.New())   // favicon de la app
+	app.Use(logger.New())    // fiber gemerea un log de peticiones a las rutas
+	app.Use(requestid.New()) // generea un uuid en las cabeceras de las rutas
+	app.Static("/", "./public", fiber.Static{
+		// Compress: true,
+		// Browse:   true,
+		CacheDuration: 10 * time.Second,
+		MaxAge:        10,
+	})
 	app.Get("/metrics", monitor.New(monitor.Config{
 		Title:   "SVC API Metrics",
 		Refresh: 2 * time.Second,
