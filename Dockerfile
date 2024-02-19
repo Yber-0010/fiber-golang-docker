@@ -7,5 +7,6 @@ RUN CGO_ENABLED=0 go build -ldflags "-s -w" -o fiber -v main.go
 FROM scratch
 WORKDIR /
 COPY --from=build-back /app/fiber ./
+COPY public ./public
 CMD ["/fiber"]
 EXPOSE 3001
