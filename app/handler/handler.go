@@ -8,7 +8,7 @@ import (
 )
 
 func User(c *fiber.Ctx) error {
-	user := m.User{FirstName: "Iber", LastName: "Chambi"}
+	user := m.NewUser("iber", "chambi")
 	return c.Status(fiber.StatusOK).JSON(user)
 }
 

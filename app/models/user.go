@@ -1,7 +1,17 @@
 package models
 
+import "github.com/google/uuid"
+
 type User struct {
-	Id        string
-	FirstName string
-	LastName  string
+	Id        string `json:"userId,omitempty"`
+	FirstName string `json:"firstName,omitempty"`
+	LastName  string `json:"lastName,omitempty"`
+}
+
+func NewUser(firstName, lastname string) User {
+	return User{
+		uuid.New().String(),
+		firstName,
+		lastname,
+	}
 }

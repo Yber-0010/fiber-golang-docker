@@ -29,7 +29,7 @@ func main() {
 	})
 
 	sr.ComplementRouter(app)
-	sr.ApiRouter(app)
+	// sr.ApiRouter(app)
 	sr.Router(app)
 
 	secure := en.GetSecure()
@@ -60,5 +60,7 @@ func main() {
 
 	<-c
 	_ = app.Shutdown()
+	log.Println("Running cleanup tasks...")
+	log.Println("Fiber was successful shutdown.")
 
 }
