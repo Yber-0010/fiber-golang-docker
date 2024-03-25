@@ -10,6 +10,7 @@ var (
 
 type environment struct {
 	environmentApp
+	environmentDB
 }
 
 func Init() {
@@ -19,8 +20,9 @@ func Init() {
 }
 
 func (e *environment) init() {
-	wg.Add(1)
+	wg.Add(2)
 	go e.initApp(&wg)
+	go e.initDB(&wg)
 	wg.Wait()
 }
 

@@ -1,7 +1,7 @@
 package router
 
 import (
-	h "github.com/Yber-0010/fiber-golang-docker/app/handler"
+	h "github.com/Yber-0010/fiber-golang-docker/user/handler"
 	"github.com/gofiber/fiber/v2"
 )
 

@@ -29,7 +29,7 @@ func ComplementRouter(app fiber.Router) {
 		MaxAge:        10,
 	})
 	app.Get("/metrics", monitor.New(monitor.Config{
-		Title:   "SVC API Metrics",
+		Title:   "fiber API Metrics",
 		Refresh: 2 * time.Second,
 	}))
 }

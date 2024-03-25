@@ -7,9 +7,9 @@ import (
 	"os/signal"
 	"syscall"
 
+	db "github.com/Yber-0010/fiber-golang-docker/database"
 	e "github.com/Yber-0010/fiber-golang-docker/env"
 	sr "github.com/Yber-0010/fiber-golang-docker/router"
-
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -23,13 +23,13 @@ func init() {
 }
 
 func main() {
-
+	db.NewPostgresDB()
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: false,
 	})
 
 	sr.ComplementRouter(app)
-	// sr.ApiRouter(app)
+	sr.ApiRouter(app)
 	sr.Router(app)
 
 	secure := en.GetSecure()
@@ -61,6 +61,7 @@ func main() {
 	<-c
 	_ = app.Shutdown()
 	log.Println("Running cleanup tasks...")
+	db.Close()
 	log.Println("Fiber was successful shutdown.")
 
 }

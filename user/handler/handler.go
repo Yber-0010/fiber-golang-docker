@@ -1,7 +1,7 @@
 package handler
 
 import (
-	m "github.com/Yber-0010/fiber-golang-docker/app/models"
+	m "github.com/Yber-0010/fiber-golang-docker/user/domain"
 	"github.com/google/uuid"
 
 	"github.com/gofiber/fiber/v2"
